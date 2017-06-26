@@ -66,10 +66,10 @@ class Route
                         file_put_contents("event_debug_replyzz.txt", json_encode($event, 128));
                         $bot->pushMessage($event['source']['userId'], $imageMessageBuilder);
                         $logger->info('Reply text: ' . $replyText[1]);
-                        $resp = $bot->replyText($event->getReplyToken(), $replyText[1]);
+                        $resp = $bot->replyText($event['replyToken'], $replyText[1]);
                     } else {
                         $logger->info('Reply text: ' . $replyText);
-                        $resp = $bot->replyText($event->getReplyToken(), $replyText);
+                        $resp = $bot->replyText($event['replyToken'], $replyText);
                     }
                     $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
                 } else {
