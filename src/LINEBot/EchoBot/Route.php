@@ -54,16 +54,17 @@ class Route
                     $st = $ai->prepare($event['message']['text']);
                     if ($st->execute()) {
                         $reply = $st->fetch_reply();
+                        $rto = isset($event['source']['groupId']) ? $event['source']['groupId'] : $event['source']['userId'];
                         if (is_array($reply)) {
                             $build = new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($reply[0], $reply[0]);   
-                            $bot->pushMessage($event['source']['userId'], $build);
+                            $bot->pushMessage($rto, $build);
                             $build = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($reply[1]);   
-                            $bot->pushMessage($event['source']['userId'], $build);
+                            $bot->pushMessage($rto, $build);
                         } else {
                             $build = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($reply);   
-                            $bot->pushMessage($event['source']['userId'], $build);
+                            $bot->pushMessage($rto, $build);
                         }
-                    } else {
+                    } elseif(!isset($event['source']['groupId'])) {
                         $build = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("Mohon maaf saya belum mengerti \"{$event['message']['text']}\"");   
                         $bot->pushMessage($event['source']['userId'], $build);
                     }
