@@ -74,6 +74,7 @@ class Route
                 }
             }
             $res->write("OK");
+            $body = array_merge(array("time" => date("Y-m-d H:i:s")), $body);
             file_put_contents("body_logs.txt", json_encode($body, 128)."\n\n", FILE_APPEND | LOCK_EX);
             return $res;
         });
