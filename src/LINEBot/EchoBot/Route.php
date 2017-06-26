@@ -50,8 +50,10 @@ class Route
             }
 
             // Check request with signature and parse request
+            $body = $req->getBody();
+            file_put_contents("body.txt", $body);
             try {
-                $events = $bot->parseEventRequest($req->getBody(), $signature[0]);
+                $events = $bot->parseEventRequest($body, $signature[0]);
             } catch (InvalidSignatureException $e) {
                 return $res->withStatus(400, 'Invalid signature');
             } catch (InvalidEventRequestException $e) {
