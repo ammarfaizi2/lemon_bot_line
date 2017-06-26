@@ -70,8 +70,9 @@ class Route
                 } else {
                     $replyText = "Mohon maaf saya belum mengerti \"{$getText}\"";
                 }
+                file_put_contents("reply.txt", $replyText);
                 $logger->info('Reply text: ' . $replyText);
-                    $resp = $bot->replyText($event->getReplyToken(), $replyText);
+                $resp = $bot->replyText($event->getReplyToken(), $replyText);
                 $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
             }
 
