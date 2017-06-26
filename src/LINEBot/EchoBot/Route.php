@@ -29,6 +29,9 @@ class Route
 {
     public function register(\Slim\App $app)
     {
+        $app->get('/test', function(){
+            $ai = new AI();
+        });
         $app->post('/callback', function (\Slim\Http\Request $req, \Slim\Http\Response $res) {
             /** @var \LINE\LINEBot $bot */
             $bot = $this->bot;

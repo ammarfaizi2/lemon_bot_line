@@ -19,7 +19,8 @@
 use LINE\LINEBot\EchoBot\Dependency;
 use LINE\LINEBot\EchoBot\Route;
 use LINE\LINEBot\EchoBot\Setting;
-
+define("data", __DIR__."/data");
+is_dir(data) or mkdir(data);
 require_once __DIR__ . '/../vendor/autoload.php';
 
 $setting = Setting::getSetting();
