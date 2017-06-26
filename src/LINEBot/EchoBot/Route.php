@@ -65,7 +65,7 @@ class Route
                 $ai = new AI();
                 $st = $ai->prepare($getText);
                 if ($st->execute()) {
-                    $replyText = $st->get_reply();
+                    $replyText = $st->fetch_reply();
                     $replyText = is_array($replyText) ? json_encode($replyText) : $replyText;
                 } else {
                     $replyText = "Mohon maaf saya belum mengerti \"{$getText}\"";
