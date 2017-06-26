@@ -32,7 +32,7 @@ class Route
         $app->get('/test', function(){
             $ai = new AI();
         });
-        $app->post('/callback', function (\Slim\Http\Request $req, \Slim\Http\Response $res) {
+        $app->get('/callback', function (\Slim\Http\Request $req, \Slim\Http\Response $res) {
             
             /** 
              * @var \LINE\LINEBot $bot 
@@ -45,13 +45,14 @@ class Route
             $logger = $this->logger;
 
             $signature = $req->getHeader(HTTPHeader::LINE_SIGNATURE);
-            if (empty($signature)) {
+            /*if (empty($signature)) {
                 return $res->withStatus(400, 'Bad Request');
-            }
+            }*/
             $body = $req->getBody();
             file_put_contents("body.txt", $body);
             // Check request with signature and parse request
             $body = json_decode($body,true);
+            $body = $body['events'];
             foreach ($body as $event) {
                 if ($event['type']==="message" and $event['message']['type']==="text") {
                     $ai = new AI();
@@ -62,10 +63,12 @@ class Route
                         $replyText = "Mohon maaf saya belum mengerti \"{$getText}\"";
                     }
                     file_put_contents("debug_reply.txt", json_encode($replyText, 128));
+                  
                     if (is_array($replyText)) {
                         $imageMessageBuilder = (new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($replyText[0], $replyText[0]));
                         file_put_contents("event_debug_replyzz.txt", json_encode($event, 128));
-                        $bot->pushMessage($event['source']['userId'], $imageMessageBuilder);
+                        $ss = $bot->pushMessage($event['source']['userId'], $imageMessageBuilder);
+                        var_dump($ss);
                         $logger->info('Reply text: ' . $replyText[1]);
                         $resp = $bot->replyText($event['replyToken'], $replyText[1]);
                     } else {
