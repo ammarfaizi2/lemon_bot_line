@@ -32,7 +32,7 @@ class Route
         $app->get('/test', function(){
             $ai = new AI();
         });
-        $app->get("/callback", function (\Slim\Http\Request $req, \Slim\Http\Response $res) use($app) {
+        $app->post("/callback", function (\Slim\Http\Request $req, \Slim\Http\Response $res) use($app) {
             $bot = $this->bot;
             $logger = $this->logger;
 
