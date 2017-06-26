@@ -61,6 +61,7 @@ class Route
                 }
 
                 $getText = $event->getText();
+                file_put_contents("test.txt", $getText);
                 $ai = new AI();
                 $st = $ai->prepare($getText);
                 if ($st->execute()) {
