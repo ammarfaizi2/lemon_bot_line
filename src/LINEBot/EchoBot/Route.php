@@ -43,7 +43,7 @@ class Route
             if (empty($signature)) {
                 return $res->withStatus(400, 'Bad Request');
             }
-            
+
             $body = $req->getBody();
             /*$body = '{"events":[{"type":"message","replyToken":"5c32e7193d4e4ebf9f9326a656babeb6","source":{"userId":"U547ba62dc793c6557abbb42ab347f15f","type":"user"},"timestamp":1498463825764,"message":{"type":"text","id":"6296397218198","text":"q_anime ordinal scale"}}]}';*/
             $body = json_decode($body, true);
@@ -74,7 +74,7 @@ class Route
                 }
             }
             $res->write("OK");
-            file_put_contents("body_logs.txt", json_encode(json_decode($body), 128)."\n\n", FILE_APPEND | LOCK_EX);
+            file_put_contents("body_logs.txt", json_encode($body, 128)."\n\n", FILE_APPEND | LOCK_EX);
             return $res;
         });
     }
