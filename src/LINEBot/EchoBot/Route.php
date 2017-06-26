@@ -74,11 +74,14 @@ class Route
                 $st = $ai->prepare($getText);
                 if ($st->execute()) {
                     $replyText = $st->fetch_reply();
-                    $replyText = is_array($replyText) ? json_encode($replyText) : $replyText;
                 } else {
                     $replyText = "Mohon maaf saya belum mengerti \"{$getText}\"";
                 }
                 file_put_contents("reply.txt", $replyText);
+                if (is_array($replyText)) {
+                    $imageMessageBuilder = new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($replyText[0], $replyText[0]);
+                    $bot->pushMessage($event['source']['userId'], $imageMessageBuilder);
+                }
                 $logger->info('Reply text: ' . $replyText);
                 $resp = $bot->replyText($event->getReplyToken(), $replyText);
                 $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
