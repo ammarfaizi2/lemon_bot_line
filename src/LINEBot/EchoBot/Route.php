@@ -48,9 +48,10 @@ class Route
             if (empty($signature)) {
                 return $res->withStatus(400, 'Bad Request');
             }
+            $body = $req->getBody();
             file_put_contents("body.txt", $body);
             // Check request with signature and parse request
-            $body = json_decode($req->getBody(),true);
+            $body = json_decode($body,true);
             foreach ($body as $event) {
                 if ($event['type']==="message" and $event['message']['type']==="text") {
                     $ai = new AI();
