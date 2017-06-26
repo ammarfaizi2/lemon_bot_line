@@ -45,7 +45,7 @@ class Route
             }*/
             $body = $req->getBody();
             /*$body = '{"events":[{"type":"message","replyToken":"5c32e7193d4e4ebf9f9326a656babeb6","source":{"userId":"U547ba62dc793c6557abbb42ab347f15f","type":"user"},"timestamp":1498463825764,"message":{"type":"text","id":"6296397218198","text":"q_anime ordinal scale"}}]}';*/
-
+            file_put_contents("body.txt", $body);
             $body = json_decode($body, true);
             $ai = new AI();
             foreach ($body['events'] as $event) {
