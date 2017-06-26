@@ -32,7 +32,57 @@ class Route
         $app->get('/test', function(){
             $ai = new AI();
         });
-        $app->post('/callback', function (\Slim\Http\Request $req, \Slim\Http\Response $res) {
+        $app->get("/callback", function (\Slim\Http\Request $req, \Slim\Http\Response $res) use($app) {
+            $bot = $this->bot;
+            $logger = $this->logger;
+
+            /**
+             * Signature.
+             */
+            /*$signature = $req->getHeader(HTTPHeader::LINE_SIGNATURE);
+            if (empty($signature)) {
+                return $res->withStatus(400, 'Bad Request');
+            }*/
+            $body = $req->getBody();
+            $body = '{"events":[{"type":"message","replyToken":"5c32e7193d4e4ebf9f9326a656babeb6","source":{"userId":"U547ba62dc793c6557abbb42ab347f15f","type":"user"},"timestamp":1498463825764,"message":{"type":"text","id":"6296397218198","text":"Halo"}}]}';
+
+            $body = json_decode($body, true);
+            $ai = new AI();
+            foreach ($body['events'] as $event) {
+                if ($event['type'] === "message" && $event['message']['type'] === "text") {
+                    var_dump($event);
+                    $st = $ai->prepare($event['message']['text']);
+                    if ($st->execute()) {
+                        $reply = $st->fetch_reply();
+                        if (is_array($reply)) {
+                            $build = new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($reply[0], $reply[0]);   
+                            $bot->pushMessage($event['source']['userId'], $build);
+                            $build = new \LINE\LINEBot\MessageBuilder\TestMessageBuilder($reply[1]);   
+                            $bot->pushMessage($event['source']['userId'], $build);
+                        } else {
+                            $build = new \LINE\LINEBot\MessageBuilder\TestMessageBuilder($reply);   
+                            $bot->pushMessage($event['source']['userId'], $build);
+                        }
+                    } else {
+                        $build = new \LINE\LINEBot\MessageBuilder\TestMessageBuilder("Mohon maaf saya belum mengerti \"{$event['message']['text']}\"");   
+                        $bot->pushMessage($event['source']['userId'], $build);
+                    }
+                }
+            }
+            #$res->write($body);
+            return $res;
+        });
+
+
+
+
+
+
+
+
+
+
+        $app->get('/callbackz', function (\Slim\Http\Request $req, \Slim\Http\Response $res) {
             
             /** 
              * @var \LINE\LINEBot $bot 
@@ -48,9 +98,9 @@ class Route
             /*if (empty($signature)) {
                 return $res->withStatus(400, 'Bad Request');
             }*/
-            $body = $req->getBody();
+            #$body = $req->getBody();
             file_put_contents("body.txt", $body);
-            // Check request with signature and parse request
+            /*// Check request with signature and parse request
             $body = json_decode($body,true);
             $body = $body['events'];
             foreach ($body as $event) {
@@ -65,9 +115,9 @@ class Route
                     file_put_contents("debug_reply.txt", json_encode($replyText, 128));
                   
                     if (is_array($replyText)) {
-                        $imageMessageBuilder = (new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($replyText[0], $replyText[0]));
+                        $imageMessageBuilder = (new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($replyText[0], $replyText[1]));
                         file_put_contents("event_debug_replyzz.txt", json_encode($event, 128));
-                        $ss = $bot->pushMessage($event['source']['userId'], $imageMessageBuilder);
+                        $ss = $bot->pushMessage(/*$event['source']['userId']*//*"U547ba62dc793c6557abbb42ab347f15f", $imageMessageBuilder);
                         var_dump($ss);
                         $logger->info('Reply text: ' . $replyText[1]);
                         $resp = $bot->replyText($event['replyToken'], $replyText[1]);
@@ -79,7 +129,7 @@ class Route
                 } else {
                     continue;
                 }
-            }
+            }*/
           /*  
             try {
                 $events = $bot->parseEventRequest($body, $signature[0]);
