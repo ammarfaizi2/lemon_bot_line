@@ -79,7 +79,7 @@ class Route
                 }
                 file_put_contents("debug_reply.txt", json_encode($replyText, 128));
                 if (is_array($replyText)) {
-                    $imageMessageBuilder = (new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($replyText[0], $replyText[0]))->build_message();
+                    $imageMessageBuilder = (new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($replyText[0], $replyText[0]));
                     file_put_contents("debug_replyzz.txt", json_encode($replyText, 128));
                     $bot->pushMessage($event['source']['userId'], $imageMessageBuilder);
                     $logger->info('Reply text: ' . $replyText[1]);
