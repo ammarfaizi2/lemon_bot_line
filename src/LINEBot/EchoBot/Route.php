@@ -77,9 +77,9 @@ class Route
                 } else {
                     $replyText = "Mohon maaf saya belum mengerti \"{$getText}\"";
                 }
-                file_put_contents("reply.txt", $replyText);
+
                 if (is_array($replyText)) {
-                    $imageMessageBuilder = new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($replyText[0], $replyText[0]);
+                    $imageMessageBuilder = (new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($replyText[0], $replyText[0]))->build_message();
                     $bot->pushMessage($event['source']['userId'], $imageMessageBuilder);
                     $logger->info('Reply text: ' . $replyText[1]);
                     $resp = $bot->replyText($event->getReplyToken(), $replyText[1]);
