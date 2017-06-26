@@ -81,9 +81,12 @@ class Route
                 if (is_array($replyText)) {
                     $imageMessageBuilder = new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($replyText[0], $replyText[0]);
                     $bot->pushMessage($event['source']['userId'], $imageMessageBuilder);
+                    $logger->info('Reply text: ' . $replyText[1]);
+                    $resp = $bot->replyText($event->getReplyToken(), $replyText[1]);
+                } else {
+                    $logger->info('Reply text: ' . $replyText);
+                    $resp = $bot->replyText($event->getReplyToken(), $replyText);
                 }
-                $logger->info('Reply text: ' . $replyText);
-                $resp = $bot->replyText($event->getReplyToken(), $replyText);
                 $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
             }
 
