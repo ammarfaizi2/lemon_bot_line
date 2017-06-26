@@ -48,7 +48,7 @@ class Route
             if (empty($signature)) {
                 return $res->withStatus(400, 'Bad Request');
             }
-
+            file_put_contents("body.txt", $body);
             // Check request with signature and parse request
             $body = json_decode($req->getBody(),true);
             foreach ($body as $event) {
@@ -76,7 +76,7 @@ class Route
                     continue;
                 }
             }
-          /*  file_put_contents("body.txt", $body);
+          /*  
             try {
                 $events = $bot->parseEventRequest($body, $signature[0]);
             } catch (InvalidSignatureException $e) {
