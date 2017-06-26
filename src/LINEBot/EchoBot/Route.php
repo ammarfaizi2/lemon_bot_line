@@ -80,8 +80,8 @@ class Route
                 file_put_contents("debug_reply.txt", json_encode($replyText, 128));
                 if (is_array($replyText)) {
                     $imageMessageBuilder = (new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($replyText[0], $replyText[0]));
+                    file_put_contents("event_debug_replyzz.txt", json_encode($event, 128));
                     $bot->pushMessage($event['source']['userId'], $imageMessageBuilder);
-                    file_put_contents("zadebug_replyzz.txt", json_encode($replyText, 128));
                     $logger->info('Reply text: ' . $replyText[1]);
                     $resp = $bot->replyText($event->getReplyToken(), $replyText[1]);
                 } else {
