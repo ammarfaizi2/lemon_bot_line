@@ -19,11 +19,13 @@
 namespace LINE\LINEBot\EchoBot;
 
 use AI\AI;
-use LINE\LINEBot\Constant\HTTPHeader;
 use LINE\LINEBot\Event\MessageEvent;
+use LINE\LINEBot\Constant\HTTPHeader;
 use LINE\LINEBot\Event\MessageEvent\TextMessage;
-use LINE\LINEBot\Exception\InvalidEventRequestException;
+use LINE\LINEBot\MessageBuilder\TextMessageBuilder;
+use LINE\LINEBot\MessageBuilder\ImageMessageBuilder;
 use LINE\LINEBot\Exception\InvalidSignatureException;
+use LINE\LINEBot\Exception\InvalidEventRequestException;
 
 class Route
 {
@@ -55,19 +57,19 @@ class Route
                         $reply = $st->fetch_reply();
                         $rto = isset($event['source']['groupId']) ? $event['source']['groupId'] : $event['source']['userId'];
                         if (is_array($reply)) {
-                            $build = new \LINE\LINEBot\MessageBuilder\ImageMessageBuilder($reply[0], $reply[0]);   
+                            $build = new ImageMessageBuilder($reply[0], $reply[0]);   
                             $resp = $bot->pushMessage($rto, $build);
                             $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
-                            $build = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($reply[1]);   
+                            $build = new TextMessageBuilder($reply[1]);   
                             $resp = $bot->pushMessage($rto, $build);
                             $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
                         } else {
-                            $build = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($reply);   
+                            $build = new TextMessageBuilder($reply);   
                             $resp = $bot->pushMessage($rto, $build);
                             $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
                         }
                     } elseif(!isset($event['source']['groupId'])) {
-                        $build = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder("Mohon maaf saya belum mengerti \"{$event['message']['text']}\"");   
+                        $build = new TextMessageBuilder("Mohon maaf saya belum mengerti \"{$event['message']['text']}\"");   
                         $resp = $bot->pushMessage($event['source']['userId'], $build);
                         $logger->info($resp->getHTTPStatus() . ': ' . $resp->getRawBody());
                     }
